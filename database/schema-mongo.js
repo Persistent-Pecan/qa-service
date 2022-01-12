@@ -1,13 +1,11 @@
 const mongoose = require('mongoose');
-uri = '';
-mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
-let qaSchema = mongoose.Schema({
-  product_id: Number,
-  question_id: {
+const questionSchema = mongoose.Schema({
+  _id: {
     type: Number,
     unique: true,
   },
+  product_id: Number,
   question_body: String,
   question_date: Date,
   asker_name: String,
@@ -26,11 +24,10 @@ let qaSchema = mongoose.Schema({
       photos: [
         {
           id: Number,
+          answer_id: Number,
           url: String,
         },
       ],
     },
   ],
 });
-
-let Repo = mongoose.model('qa', repoSchema);
