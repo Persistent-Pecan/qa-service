@@ -1,17 +1,18 @@
-/* CREATE DATABASE qa;
-psql -d qa -f schema-sql.sql
-*/
+-- CREATE DATABASE qa;
+-- psql -d qa -f schema-sql.sql
 
 \connect qa;
 
 /* QUESTIONS */
-DROP TABLE IF EXISTS QUESTIONS;
+DROP TABLE IF EXISTS photos;
+DROP TABLE IF EXISTS answers;
+DROP TABLE IF EXISTS questions;
 
 CREATE TABLE questions (
  id BIGSERIAL,
  product_id INTEGER,
  body VARCHAR(1000),
- date_written DATE,
+ date_written TIMESTAMP,
  asker_name VARCHAR(60),
  asker_email VARCHAR(60),
  reported BOOLEAN,
@@ -21,13 +22,11 @@ CREATE TABLE questions (
 ALTER TABLE questions ADD CONSTRAINT questions_pkey PRIMARY KEY (id);
 
 /* ANSWERS */
-DROP TABLE IF EXISTS answers;
-
 CREATE TABLE answers (
  id BIGSERIAL,
  question_id INTEGER,
  body VARCHAR(1000),
- date_written DATE,
+ date_written TIMESTAMP,
  answerer_name VARCHAR(60),
  answerer_email VARCHAR(60),
  reported BOOLEAN,
@@ -37,12 +36,10 @@ CREATE TABLE answers (
 ALTER TABLE answers ADD CONSTRAINT answers_pkey PRIMARY KEY (id);
 
 /* PHOTOS */
-DROP TABLE IF EXISTS photos;
-
 CREATE TABLE photos (
  id BIGSERIAL,
  answer_id INTEGER,
- url INTEGER
+ url VARCHAR
 );
 
 ALTER TABLE photos ADD CONSTRAINT photos_pkey PRIMARY KEY (id);
