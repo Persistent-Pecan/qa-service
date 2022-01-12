@@ -1,19 +1,27 @@
--- psql -d qa -f etl.sql
+-- psql -d qa -a -f etl.sql
 
-\copy questions FROM '../data/questions.csv' DELIMITER ',' csv header;
+-- [1] LOAD DATA FROM CSV FILES
 
-/*
-psql:etl.sql:1: ERROR:  date/time field value out of range: "1595884714409"
-HINT:  Perhaps you need a different "datestyle" setting.
-CONTEXT:  COPY questions, line 2, column date_written: "1595884714409"
-*/
+  -- TRUNCATE questions;
+  -- \copy questions FROM '../data/questions.csv' DELIMITER ',' csv header;
+  -- 3,518,963 rows
 
--- \copy answers FROM '../data/answers.csv' csv header;
+  -- TRUNCATE answers;
+  -- \copy answers FROM '../data/answers.csv' DELIMITER ',' csv header;
+  -- 6,879,306 rows
 
-/*
-psql:etl.sql:11: ERROR:  date/time field value out of range: "1599958385988"
-HINT:  Perhaps you need a different "datestyle" setting.
-CONTEXT:  COPY answers, line 2, column date_written: "1599958385988"
-*/
+  -- TRUNCATE photos;
+  -- \copy photos FROM '../data/answers_photos.csv' DELIMITER ',' csv header;
+  -- 2,063,759 rows
 
--- \copy photos FROM '../data/answers_photos.csv' csv header;
+-- [2] CONVERT UNIX TIME TO REGULAR TIMESTAMP
+
+  /*
+  ALTER TABLE questions
+  ALTER COLUMN date_written SET DATA TYPE timestamp without time zone
+  USING timestamp without time zone 'epoch' + (date_written / 1000 ) * interval '1 second';
+
+  ALTER TABLE answers
+  ALTER COLUMN date_written SET DATA TYPE timestamp without time zone
+  USING timestamp without time zone 'epoch' + (date_written / 1000 ) * interval '1 second';
+  */
