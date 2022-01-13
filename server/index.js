@@ -1,15 +1,25 @@
 const express = require('express');
-const path = require('path');
+const db = require('../database');
 
 const app = express();
 const port = 3000;
-const publicPath = path.join(__dirname, '../client/dist');
 
 app.use(express.json());
 
 // GET Routes
-app.get('/qa/questions', (req, res) => { res.end('GET - Questions route'); });
-app.get('/qa/answers', (req, res) => { res.end('GET - Answers route'); });
+app.get('/qa/questions', (req, res) => {
+  db.query('SELECT * FROM questions WHERE product_id = $1', [req.query.product_id], (err, result) => {
+    if (err) { console.log(err); }
+    res.send(result.rows);
+  });
+});
+
+app.get('/qa/answers', (req, res) => {
+  db.query('SELECT * FROM answers WHERE question_id = $1', [req.query.question_id], (err, result) => {
+    if (err) { console.log(err); }
+    res.send(result.rows);
+  });
+});
 
 // POST Routes
 app.post('/qa/questions', (req, res) => { res.end('POST - Questions route'); });

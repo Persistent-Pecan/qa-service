@@ -1,7 +1,13 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-const client = new Client();
-await client.connect();
-const res = await client.query('SELECT $1::text as message', ['Hello world!']);
-console.log(res.rows[0].message); // Hello world!
-await client.end();
+const pool = new Pool({
+  user: 'andrew',
+  host: 'localhost',
+  database: 'qa',
+});
+
+module.exports = {
+  query: (text, params, callback) => {
+    return pool.query(text, params, callback);
+  },
+};
