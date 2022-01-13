@@ -1,4 +1,4 @@
--- psql -d qa -a -f etl.sql
+-- psql -d qa -f database/etl.sql -a
 
 -- [1] LOAD DATA FROM CSV FILES
 

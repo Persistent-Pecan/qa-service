@@ -1,4 +1,4 @@
--- psql -d qa -f schema-sql.sql
+-- psql -d qa -f database/schema-sql.sql -a
 
 -- CREATE DATABASE qa;
 \connect qa;
