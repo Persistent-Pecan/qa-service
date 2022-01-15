@@ -9,28 +9,28 @@ DROP TABLE IF EXISTS answers;
 DROP TABLE IF EXISTS questions;
 
 CREATE TABLE questions (
- id BIGSERIAL,
+ question_id BIGSERIAL,
  product_id INTEGER,
- body VARCHAR(1000),
- date_written BIGINT,
+ question_body VARCHAR(1000),
+ question_date BIGINT,
  asker_name VARCHAR(60),
  asker_email VARCHAR(60),
  reported BOOLEAN,
- helpful INTEGER
+ question_helpfulness INTEGER
 );
 
-ALTER TABLE questions ADD CONSTRAINT questions_pkey PRIMARY KEY (id);
+ALTER TABLE questions ADD CONSTRAINT questions_pkey PRIMARY KEY (question_id);
 
 -- ANSWERS
 CREATE TABLE answers (
  id BIGSERIAL,
  question_id INTEGER,
  body VARCHAR(1000),
- date_written BIGINT,
+ date BIGINT,
  answerer_name VARCHAR(60),
  answerer_email VARCHAR(60),
  reported BOOLEAN,
- helpful INTEGER
+ helpfulness INTEGER
 );
 
 ALTER TABLE answers ADD CONSTRAINT answers_pkey PRIMARY KEY (id);
@@ -45,5 +45,5 @@ CREATE TABLE photos (
 ALTER TABLE photos ADD CONSTRAINT photos_pkey PRIMARY KEY (id);
 
 -- FOREIGN KEYS
-ALTER TABLE answers ADD CONSTRAINT answers_question_id_fkey FOREIGN KEY (question_id) REFERENCES questions(id);
+ALTER TABLE answers ADD CONSTRAINT answers_question_id_fkey FOREIGN KEY (question_id) REFERENCES questions(question_id);
 ALTER TABLE photos ADD CONSTRAINT photos_answer_id_fkey FOREIGN KEY (answer_id) REFERENCES answers(id);
