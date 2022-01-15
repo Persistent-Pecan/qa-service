@@ -13,8 +13,8 @@ app.get('/qa/questions', models.listQuestions);
 app.get('/qa/:question_id/answers', models.listAnswers);
 
 // POST Routes
-app.post('/qa/questions', (req, res) => { res.end('POST - Questions route'); });
-app.post('/qa/answers', (req, res) => { res.end('POST - Answers route'); });
+app.post('/qa/questions', models.postQuestion);
+app.post('/qa/answers', models.postAnswer);
 
 // PUT Routes
 app.put('/qa/questions/helpful', (req, res) => { res.end('PUT - Questions helpful route'); });

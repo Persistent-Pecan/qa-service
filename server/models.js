@@ -49,7 +49,7 @@ module.exports = {
         LIMIT $2
       ) as q
       GROUP BY 1
-      `;
+    `;
 
     try {
       const { product_id, count = 5 } = req.query;
@@ -91,7 +91,7 @@ module.exports = {
         limit $2
       ) as a
       GROUP BY 1,2,3
-      `;
+    `;
 
     try {
       const { question_id } = req.params;
@@ -101,5 +101,37 @@ module.exports = {
     } catch (error) {
       console.log(error);
     }
-  }
+  },
+
+  postQuestion: async (req, res) => {
+    const { product_id, question_body, asker_name, asker_email } = req.body;
+    console.log(product_id, question_body, asker_name, asker_email);
+    const query = `
+      INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
+      VALUES ($1, $2, now(), $3, $4)
+    `;
+
+    try {
+      const results = await db.client.query(query, [product_id, question_body, asker_name, asker_email])
+      res.send(results);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  postAnswer: async (req, res) => {
+    const query = `
+      SELECT
+        *
+      FROM answers
+      LIMIT 10;
+      `;
+
+    try {
+      const { rows } = await db.client.query(query)
+      res.send(rows[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
