@@ -32,15 +32,3 @@ module.exports = {
     res.send(rows);
   }
 };
-
-/*
-product_id = 63609
-question_id = 563233
-
-'https://app-hrsei-api.herokuapp.com/api/fec2/hr-sfo/qa/questions',
-`https://app-hrsei-api.herokuapp.com/api/fec2/hr-sfo/qa/questions/${req.query.question_id}/answers`
-`https://app-hrsei-api.herokuapp.com/api/fec2/hr-sfo/qa/questions/${req.body.question_id}/helpful`
-`https://app-hrsei-api.herokuapp.com/api/fec2/hr-sfo/qa/questions/${req.body.question_id}/report`
-`https://app-hrsei-api.herokuapp.com/api/fec2/hr-sfo/qa/answers/${req.body.answer_id}/helpful`
-`https://app-hrsei-api.herokuapp.com/api/fec2/hr-sfo/qa/answers/${req.body.answer_id}/report`
-*/
