@@ -1,14 +1,16 @@
 const express = require('express');
 const models = require('./models.js');
+const middleware = require('./middleware.js');
 
 const app = express();
 const port = 3000;
 
 app.use(express.json());
+app.use(middleware.logger);
 
 // GET Routes
 app.get('/qa/questions', models.listQuestions);
-app.get('/qa/answers', (req, res) => { res.end('GET - Answers route'); });
+app.get('/qa/answers', models.listAnswers);
 
 // POST Routes
 app.post('/qa/questions', (req, res) => { res.end('POST - Questions route'); });
