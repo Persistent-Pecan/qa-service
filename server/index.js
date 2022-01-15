@@ -10,11 +10,11 @@ app.use(middleware.logger);
 
 // GET Routes
 app.get('/qa/questions', models.listQuestions);
-app.get('/qa/:question_id/answers', models.listAnswers);
+app.get('/qa/questions/:question_id/answers', models.listAnswers);
 
 // POST Routes
 app.post('/qa/questions', models.postQuestion);
-app.post('/qa/answers', models.postAnswer);
+app.post('/qa/questions/:question_id/answers', models.postAnswer);
 
 // PUT Routes
 app.put('/qa/questions/helpful', (req, res) => { res.end('PUT - Questions helpful route'); });

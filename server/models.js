@@ -56,7 +56,7 @@ module.exports = {
       const { rows } = await db.client.query(query, [product_id, count])
       res.send(rows[0]);
     } catch (error) {
-      console.log(error);
+      res.status(500).send(error);
     }
   },
 
@@ -99,13 +99,14 @@ module.exports = {
       const { rows } = await db.client.query(query, [page, count, question_id])
       res.send(rows[0]);
     } catch (error) {
-      console.log(error);
+      res.status(500).send(error);
     }
   },
 
   postQuestion: async (req, res) => {
-    const { product_id, question_body, asker_name, asker_email } = req.body;
-    console.log(product_id, question_body, asker_name, asker_email);
+    const { product_id } = req.params;
+    const { question_body, asker_name, asker_email } = req.body;
+
     const query = `
       INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
       VALUES ($1, $2, now(), $3, $4)
@@ -113,25 +114,35 @@ module.exports = {
 
     try {
       const results = await db.client.query(query, [product_id, question_body, asker_name, asker_email])
-      res.send(results);
+      res.send('Question inserted successfully.');
     } catch (error) {
-      console.log(error);
+      res.status(500).send(error);
     }
   },
 
   postAnswer: async (req, res) => {
-    const query = `
-      SELECT
-        *
-      FROM answers
-      LIMIT 10;
-      `;
+    const { question_id } = req.params;
+    const { body, answerer_name, answerer_email, photos } = req.body;
+    console.log(question_id, body, answerer_name, answerer_email, photos);
+
+    const queryInsertAnswer = `
+      INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)
+      VALUES ($1, $2, now(), $3, $4)
+      RETURNING id
+    `;
+
+    const queryInsertPhoto = `
+      INSERT INTO photos (answer_id, url)
+      VALUES ($1, $2)
+    `;
 
     try {
-      const { rows } = await db.client.query(query)
-      res.send(rows[0]);
+      const answerResults = await db.client.query(queryInsertAnswer, [question_id, body, answerer_name, answerer_email])
+      const answer_id = answerResults.rows[0].id;
+      const photoResults = await db.client.query(queryInsertPhoto, [answer_id, photos])
+      res.send('Answer inserted successfully');
     } catch (error) {
-      console.log(error);
+      res.status(500).send(error);
     }
   },
 };
