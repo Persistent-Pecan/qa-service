@@ -94,7 +94,8 @@ module.exports = {
       `;
 
     try {
-      const { page = 1, count = 5, question_id } = req.query;
+      const { question_id } = req.params;
+      const { page = 1, count = 5 } = req.query;
       const { rows } = await db.client.query(query, [page, count, question_id])
       res.send(rows[0]);
     } catch (error) {

@@ -10,7 +10,7 @@ app.use(middleware.logger);
 
 // GET Routes
 app.get('/qa/questions', models.listQuestions);
-app.get('/qa/answers', models.listAnswers);
+app.get('/qa/:question_id/answers', models.listAnswers);
 
 // POST Routes
 app.post('/qa/questions', (req, res) => { res.end('POST - Questions route'); });
