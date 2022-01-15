@@ -6,35 +6,52 @@ module.exports = {
     console.log('GET request to /qa/questions with product_id: ', product_id);
 
     const query = `
-      select
-      product_id,
-      json_agg(json_build_object(
-        'question_id', q.question_id,
-        'question_body', q.question_body,
-        'question_date', q.question_date,
-        'asker_name', q.asker_name,
-        'question_helpfulness', q.question_helpfulness,
-        'reported', q.reported,
-        'answers', (SELECT
-        coalesce(answers, '{}'::json)
-        FROM (
-        select json_object_agg(
-          id, json_build_object(
-            'id', id,
-            'body', body,
-            'date', date,
-            'answerer_name', answerer_name,
-            'helpfulness', helpfulness
+      SELECT
+        product_id,
+        json_agg(
+          json_build_object(
+            'question_id', q.question_id,
+            'question_body', q.question_body,
+            'question_date', q.question_date,
+            'asker_name', q.asker_name,
+            'question_helpfulness', q.question_helpfulness,
+            'reported', q.reported,
+            'answers', (
+              SELECT
+                coalesce(answers, '{}'::json)
+              FROM (
+                SELECT
+                  json_object_agg(
+                    id,
+                    json_build_object(
+                      'id', id,
+                      'body', body,
+                      'date', date,
+                      'answerer_name', answerer_name,
+                      'helpfulness', helpfulness,
+                      'photos', (
+                        SELECT
+                          coalesce(photos, '[]'::json)
+                        FROM (
+                          SELECT
+                            json_agg(url) as photos
+                          FROM photos p
+                          WHERE p.answer_id = a.id
+                        ) as photos
+                      )
+                    )
+                  ) as answers
+                FROM answers a
+                WHERE a.question_id = q.question_id
+              ) as answers
             )
-        ) as answers
-        from answers a
-        where a.question_id = q.question_id) as answers)
-      )) as results
+          )
+        ) as results
       FROM questions q
       WHERE true
-        and product_id = $1
-        -- and reported = false
-      group by 1
+        AND product_id = $1 -- 63610
+        AND reported = false
+      GROUP BY 1
       `;
 
     const { rows } = await db.client.query(query, [product_id])
