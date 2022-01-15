@@ -7,25 +7,34 @@ module.exports = {
 
     const query = `
       select
-        q.question_id,
-        q.question_body,
-        q.question_date,
-        q.asker_name,
-        q.question_helpfulness,
-        q.reported,
-        json_agg(a.answers) as answers
-      FROM questions q
-      LEFT JOIN (
-        select
-        question_id,
-        a.id as answer_id,
-        json_build_object(a.id, json_agg(a.*)) as answers
+      product_id,
+      json_agg(json_build_object(
+        'question_id', q.question_id,
+        'question_body', q.question_body,
+        'question_date', q.question_date,
+        'asker_name', q.asker_name,
+        'question_helpfulness', q.question_helpfulness,
+        'reported', q.reported,
+        'answers', (SELECT
+        coalesce(answers, '{}'::json)
+        FROM (
+        select json_object_agg(
+          id, json_build_object(
+            'id', id,
+            'body', body,
+            'date', date,
+            'answerer_name', answerer_name,
+            'helpfulness', helpfulness
+            )
+        ) as answers
         from answers a
-        group by 1,2
-      ) a
-      on q.question_id = a.question_id
-      WHERE product_id = $1
-      group by 1,2,3,4,5,6;
+        where a.question_id = q.question_id) as answers)
+      )) as results
+      FROM questions q
+      WHERE true
+        and product_id = $1
+        -- and reported = false
+      group by 1
       `;
 
     const { rows } = await db.client.query(query, [product_id])
