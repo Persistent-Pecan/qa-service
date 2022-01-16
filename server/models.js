@@ -54,7 +54,7 @@ module.exports = {
     try {
       const { product_id, count = 5 } = req.query;
       const { rows } = await db.client.query(query, [product_id, count])
-      res.send(rows[0]);
+      res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
     }
@@ -97,7 +97,7 @@ module.exports = {
       const { question_id } = req.params;
       const { page = 1, count = 5 } = req.query;
       const { rows } = await db.client.query(query, [page, count, question_id])
-      res.send(rows[0]);
+      res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
     }
