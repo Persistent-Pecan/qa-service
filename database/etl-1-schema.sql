@@ -1,4 +1,4 @@
--- psql -d qa -f database/schema-sql.sql -a
+-- psql -d qa -f database/etl-1-schema.sql -a
 
 -- CREATE DATABASE qa;
 \connect qa;
@@ -15,8 +15,8 @@ CREATE TABLE questions (
  question_date BIGINT,
  asker_name VARCHAR(60),
  asker_email VARCHAR(60),
- reported BOOLEAN,
- question_helpfulness INTEGER
+ reported BOOLEAN DEFAULT FALSE,
+ question_helpfulness INTEGER DEFAULT 0
 );
 
 ALTER TABLE questions ADD CONSTRAINT questions_pkey PRIMARY KEY (question_id);
@@ -29,8 +29,8 @@ CREATE TABLE answers (
  date BIGINT,
  answerer_name VARCHAR(60),
  answerer_email VARCHAR(60),
- reported BOOLEAN,
- helpfulness INTEGER
+ reported BOOLEAN DEFAULT FALSE,
+ helpfulness INTEGER DEFAULT 0
 );
 
 ALTER TABLE answers ADD CONSTRAINT answers_pkey PRIMARY KEY (id);
