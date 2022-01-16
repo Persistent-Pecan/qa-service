@@ -104,26 +104,24 @@ module.exports = {
   },
 
   postQuestion: async (req, res) => {
-    const { product_id } = req.params;
-    const { question_body, asker_name, asker_email } = req.body;
-
+    const { product_id, body, name, email } = req.body;
+    console.log(product_id, body, name, email);
     const query = `
       INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
       VALUES ($1, $2, now(), $3, $4)
     `;
 
     try {
-      const results = await db.client.query(query, [product_id, question_body, asker_name, asker_email])
-      res.send('Question inserted successfully.');
+      const results = await db.client.query(query, [product_id, body, name, email])
+      res.status(201).send('Question inserted successfully.');
     } catch (error) {
       res.status(500).send(error);
     }
   },
 
   postAnswer: async (req, res) => {
-    const { question_id } = req.params;
-    const { body, answerer_name, answerer_email, photos } = req.body;
-    console.log(question_id, body, answerer_name, answerer_email, photos);
+    const { question_id, body, name, email, photos } = req.body;
+    console.log(question_id, body, name, email, photos);
 
     const queryInsertAnswer = `
       INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)
@@ -137,10 +135,10 @@ module.exports = {
     `;
 
     try {
-      const answerResults = await db.client.query(queryInsertAnswer, [question_id, body, answerer_name, answerer_email])
+      const answerResults = await db.client.query(queryInsertAnswer, [question_id, body, name, email])
       const answer_id = answerResults.rows[0].id;
       const photoResults = await db.client.query(queryInsertPhoto, [answer_id, photos])
-      res.send('Answer inserted successfully');
+      res.status(201).send('Answer inserted successfully');
     } catch (error) {
       res.status(500).send(error);
     }
