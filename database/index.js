@@ -1,17 +1,17 @@
-const { Client } = require('pg');
+const { Pool } = require('pg');
 
-const client = new Client({
+const pool = new Pool({
   user: 'andrew',
   host: 'localhost',
   database: 'qa',
+  max: 20,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 2000,
 });
 
-client.connect(err => {
-  if (err) {
-    console.error('database connection error', err.stack)
-  } else {
-    console.log('database connected')
-  }
+pool.on('error', (err, client) => {
+  console.error('Unexpected error on idle client', err)
+  process.exit(-1)
 })
 
-module.exports.client = client;
+module.exports.pool = pool;

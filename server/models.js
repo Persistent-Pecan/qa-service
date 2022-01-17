@@ -51,9 +51,12 @@ module.exports = {
       GROUP BY 1
     `;
 
+    const client = await db.pool.connect();
+
     try {
       const { product_id, count = 5 } = req.query;
-      const { rows } = await db.client.query(query, [product_id, count])
+      const { rows } = await client.query(query, [product_id, count])
+      client.release();
       res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
@@ -93,10 +96,13 @@ module.exports = {
       GROUP BY 1,2,3
     `;
 
+    const client = await db.pool.connect();
+
     try {
       const { question_id } = req.params;
       const { page = 1, count = 5 } = req.query;
-      const { rows } = await db.client.query(query, [page, count, question_id])
+      const { rows } = await client.query(query, [page, count, question_id])
+      client.release();
       res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
@@ -105,14 +111,17 @@ module.exports = {
 
   postQuestion: async (req, res) => {
     const { product_id, body, name, email } = req.body;
-    console.log(product_id, body, name, email);
+
     const query = `
       INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
       VALUES ($1, $2, now(), $3, $4)
     `;
 
+    const client = await db.pool.connect();
+
     try {
-      const results = await db.client.query(query, [product_id, body, name, email])
+      const results = await db.pool.query(query, [product_id, body, name, email])
+      client.release();
       res.status(201).send('Question inserted successfully.');
     } catch (error) {
       res.status(500).send(error);
@@ -121,7 +130,6 @@ module.exports = {
 
   postAnswer: async (req, res) => {
     const { question_id, body, name, email, photos } = req.body;
-    console.log(question_id, body, name, email, photos);
 
     const queryInsertAnswer = `
       INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)
@@ -134,10 +142,12 @@ module.exports = {
       VALUES ($1, $2)
     `;
 
+    const client = await db.pool.connect();
+
     try {
-      const answerResults = await db.client.query(queryInsertAnswer, [question_id, body, name, email])
+      const answerResults = await db.pool.query(queryInsertAnswer, [question_id, body, name, email])
       const answer_id = answerResults.rows[0].id;
-      const photoResults = await db.client.query(queryInsertPhoto, [answer_id, photos])
+      const photoResults = await client.query(queryInsertPhoto, [answer_id, photos])
       res.status(201).send('Answer inserted successfully');
     } catch (error) {
       res.status(500).send(error);
