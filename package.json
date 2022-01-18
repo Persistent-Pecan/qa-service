@@ -20,6 +20,7 @@
   "homepage": "https://github.com/Persistent-Pecan/questions-answers#readme",
   "dependencies": {
     "express": "^4.17.2",
+    "forever": "^4.0.2",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1"
   },
