@@ -14,7 +14,7 @@ module.exports = {
             'question_helpfulness', q.question_helpfulness,
             'reported', q.reported,
             'answers', (
-              SELECT coalesce(answers, '{}')
+              SELECT coalesce(answers, '{}'::json)
               FROM (
                 SELECT
                   json_object_agg(
@@ -26,7 +26,7 @@ module.exports = {
                       'answerer_name', answerer_name,
                       'helpfulness', helpfulness,
                       'photos', (
-                        SELECT coalesce(json_agg(url), '[]')
+                        SELECT coalesce(json_agg(url), '[]'::json)
                         FROM (
                           SELECT url
                           FROM photos p
@@ -74,9 +74,9 @@ module.exports = {
               'answerer_name', answerer_name,
               'helpfulness', helpfulness,
               'photos', (
-                SELECT coalesce(photos, '[]')
+                SELECT coalesce(json_agg(url), '[]'::json)
                 FROM (
-                  SELECT json_agg(url) as photos
+                  SELECT url
                   FROM photos p
                   WHERE p.answer_id = a.id
                 ) as photos
