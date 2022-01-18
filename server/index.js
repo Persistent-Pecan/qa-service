@@ -1,6 +1,6 @@
 const express = require('express');
-const models = require('./models.js');
-const middleware = require('./middleware.js');
+const models = require('./models');
+const middleware = require('./middleware');
 
 const app = express();
 const port = 3000;
