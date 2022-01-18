@@ -114,7 +114,7 @@ module.exports = {
 
     try {
       const { rows } = await db.pool.query(query, [product_id, body, name, email]);
-      res.status(201).send(rows[0].question_id);
+      res.status(201).send(`Question inserted successfully: ${rows[0].question_id}`);
     } catch (error) {
       res.status(500).send(error);
     }
@@ -145,7 +145,7 @@ module.exports = {
           const { rows } = await db.pool.query(queryInsertPhoto, [answer_id, photo]);
           photoIds.push(rows[0].id);
         }));
-        res.status(201).send(photoIds);
+        res.status(201).send(`Answer submitted successfully: ${answer_id}, with photos: ${photoIds}`);
       })();
     } catch (error) {
       res.status(500).send(error);
