@@ -145,7 +145,6 @@ module.exports = {
           const { rows } = await db.pool.query(queryInsertPhoto, [answer_id, photo]);
           photoIds.push(rows[0].id);
         }));
-        console.log(photoIds);
         res.status(201).send(photoIds);
       })();
     } catch (error) {
