@@ -19,8 +19,10 @@
   },
   "homepage": "https://github.com/Persistent-Pecan/questions-answers#readme",
   "dependencies": {
+    "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "forever": "^4.0.2",
+    "newrelic": "^8.7.1",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1"
   },
