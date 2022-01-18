@@ -2,6 +2,19 @@
 \timing
 
 -------------------------
+-- Function for random integer
+-------------------------
+/*
+CREATE OR REPLACE FUNCTION random_between(low INT ,high INT)
+   RETURNS INT AS
+$$
+BEGIN
+   RETURN floor(random()* (high-low + 1) + low);
+END;
+$$ language 'plpgsql' STRICT;
+*/
+
+-------------------------
 -- listQuestions
 -------------------------
 SELECT
@@ -27,7 +40,7 @@ SELECT
                 'answerer_name', answerer_name,
                 'helpfulness', helpfulness,
                 'photos', (
-                  SELECT coalesce(photos, '[]')
+                  SELECT coalesce(photos, '[]'::json)
                   FROM (
                     SELECT json_agg(url) as photos
                     FROM photos p
@@ -43,10 +56,9 @@ SELECT
     )
   ) as results
 FROM questions q
-WHERE product_id = 63610
+WHERE product_id = (SELECT random_between(0, 1000011))
   AND reported = false
 GROUP BY 1;
--- Time: 3790.074 ms (00:03.790)
 
 -------------------------
 -- listAnswers
@@ -63,7 +75,7 @@ SELECT
         'answerer_name', answerer_name,
         'helpfulness', helpfulness,
         'photos', (
-          SELECT coalesce(photos, '[]')
+          SELECT coalesce(photos, '[]'::json)
           FROM (
             SELECT json_agg(url) as photos
             FROM photos p
@@ -75,27 +87,23 @@ SELECT
 FROM (
   SELECT *
   FROM answers
-  WHERE question_id = 223600
+  WHERE question_id = (SELECT random_between(0, 3518963))
     AND reported = false
   limit 5
 ) as a
 GROUP BY 1,2,3;
--- Time: 4150.064 ms (00:04.150)
 
 -------------------------
 -- postQuestion
 -------------------------
 INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
-VALUES (63610, 'Test question body', now(), 'Tester', 'test@gmail.com');
--- Time: 2.122 ms
+VALUES ((SELECT random_between(0, 1000011)), 'Test question body', now(), 'Tester', 'test@gmail.com');
 
 -------------------------
 -- postAnswer
 -------------------------
 INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)
-VALUES (223600, 'Test answer body', now(), 'Tester', 'test@gmail.com');
--- Time: 2.072 ms
+VALUES ((SELECT random_between(0, 3518963)), 'Test answer body', now(), 'Tester', 'test@gmail.com');
 
 INSERT INTO photos (answer_id, url)
-VALUES (436392, 'https://images.unsplash.com/photo-1511766566737-1740d1da79be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80');
--- Time: 1.585 ms
+VALUES ((SELECT random_between(0, 6879306)), 'https://images.unsplash.com/photo-1511766566737-1740d1da79be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80');
