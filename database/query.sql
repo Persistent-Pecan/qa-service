@@ -1,5 +1,4 @@
 -- psql -d qa -f database/query.sql
-\timing
 
 -------------------------
 -- Function for random integer
@@ -17,7 +16,7 @@ $$ language 'plpgsql' STRICT;
 -------------------------
 -- listQuestions
 -------------------------
-SELECT
+EXPLAIN ANALYZE SELECT
   product_id,
   json_agg(
     json_build_object(
@@ -40,9 +39,9 @@ SELECT
                 'answerer_name', answerer_name,
                 'helpfulness', helpfulness,
                 'photos', (
-                  SELECT coalesce(photos, '[]'::json)
+                  SELECT coalesce(json_agg(url), '[]')
                   FROM (
-                    SELECT json_agg(url) as photos
+                    SELECT url
                     FROM photos p
                     WHERE p.answer_id = a.id
                   ) as photos
@@ -63,7 +62,7 @@ GROUP BY 1;
 -------------------------
 -- listAnswers
 -------------------------
-SELECT
+EXPLAIN ANALYZE SELECT
   a.question_id,
   1 as page,
   5 as count,
@@ -96,14 +95,14 @@ GROUP BY 1,2,3;
 -------------------------
 -- postQuestion
 -------------------------
-INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
+EXPLAIN ANALYZE INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
 VALUES ((SELECT random_between(0, 1000011)), 'Test question body', now(), 'Tester', 'test@gmail.com');
 
 -------------------------
 -- postAnswer
 -------------------------
-INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)
+EXPLAIN ANALYZE INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)
 VALUES ((SELECT random_between(0, 3518963)), 'Test answer body', now(), 'Tester', 'test@gmail.com');
 
-INSERT INTO photos (answer_id, url)
+EXPLAIN ANALYZE INSERT INTO photos (answer_id, url)
 VALUES ((SELECT random_between(0, 6879306)), 'https://images.unsplash.com/photo-1511766566737-1740d1da79be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1650&q=80');

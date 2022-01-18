@@ -26,9 +26,9 @@ module.exports = {
                       'answerer_name', answerer_name,
                       'helpfulness', helpfulness,
                       'photos', (
-                        SELECT coalesce(photos, '[]')
+                        SELECT coalesce(json_agg(url), '[]')
                         FROM (
-                          SELECT json_agg(url) as photos
+                          SELECT url
                           FROM photos p
                           WHERE p.answer_id = a.id
                         ) as photos
@@ -53,7 +53,7 @@ module.exports = {
 
     try {
       const { product_id, count = 5 } = req.query;
-      const { rows } = await db.pool.query(query, [product_id, count])
+      const { rows } = await db.pool.query(query, [product_id, count]);
       res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
@@ -96,7 +96,7 @@ module.exports = {
     try {
       const { question_id } = req.params;
       const { page = 1, count = 5 } = req.query;
-      const { rows } = await db.pool.query(query, [page, count, question_id])
+      const { rows } = await db.pool.query(query, [page, count, question_id]);
       res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
@@ -109,11 +109,12 @@ module.exports = {
     const query = `
       INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
       VALUES ($1, $2, now(), $3, $4)
+      RETURNING question_id
     `;
 
     try {
-      const results = await db.pool.query(query, [product_id, body, name, email])
-      res.status(201).send('Question inserted successfully.');
+      const { rows } = await db.pool.query(query, [product_id, body, name, email]);
+      res.status(201).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
     }
@@ -131,14 +132,22 @@ module.exports = {
     const queryInsertPhoto = `
       INSERT INTO photos (answer_id, url)
       VALUES ($1, $2)
+      RETURNING id
     `;
 
     try {
-      const answerResults = await db.pool.query(queryInsertAnswer, [question_id, body, name, email])
+      const answerResults = await db.pool.query(queryInsertAnswer, [question_id, body, name, email]);
       const answer_id = answerResults.rows[0].id;
+      const photoIds = [];
 
-      const photoResults = await db.pool.query(queryInsertPhoto, [answer_id, photos])
-      res.status(201).send('Answer inserted successfully');
+      (async () => {
+        await Promise.all(photos.map(async (photo) => {
+          const { rows } = await db.pool.query(queryInsertPhoto, [answer_id, photo]);
+          photoIds.push(rows[0].id);
+        }));
+
+        res.status(201).send(photoIds);
+      })();
     } catch (error) {
       res.status(500).send(error);
     }
