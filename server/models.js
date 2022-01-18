@@ -51,12 +51,9 @@ module.exports = {
       GROUP BY 1
     `;
 
-    const client = await db.pool.connect();
-
     try {
       const { product_id, count = 5 } = req.query;
-      const { rows } = await client.query(query, [product_id, count])
-      client.release();
+      const { rows } = await db.pool.query(query, [product_id, count])
       res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
@@ -96,13 +93,10 @@ module.exports = {
       GROUP BY 1,2,3
     `;
 
-    const client = await db.pool.connect();
-
     try {
       const { question_id } = req.params;
       const { page = 1, count = 5 } = req.query;
-      const { rows } = await client.query(query, [page, count, question_id])
-      client.release();
+      const { rows } = await db.pool.query(query, [page, count, question_id])
       res.status(200).send(rows[0]);
     } catch (error) {
       res.status(500).send(error);
@@ -117,11 +111,8 @@ module.exports = {
       VALUES ($1, $2, now(), $3, $4)
     `;
 
-    const client = await db.pool.connect();
-
     try {
       const results = await db.pool.query(query, [product_id, body, name, email])
-      client.release();
       res.status(201).send('Question inserted successfully.');
     } catch (error) {
       res.status(500).send(error);
@@ -142,12 +133,11 @@ module.exports = {
       VALUES ($1, $2)
     `;
 
-    const client = await db.pool.connect();
-
     try {
       const answerResults = await db.pool.query(queryInsertAnswer, [question_id, body, name, email])
       const answer_id = answerResults.rows[0].id;
-      const photoResults = await client.query(queryInsertPhoto, [answer_id, photos])
+
+      const photoResults = await db.pool.query(queryInsertPhoto, [answer_id, photos])
       res.status(201).send('Answer inserted successfully');
     } catch (error) {
       res.status(500).send(error);
