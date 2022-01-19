@@ -1,3 +1,4 @@
+const newrelic = require('newrelic');
 const express = require('express');
 const models = require('./models');
 const middleware = require('./middleware');
