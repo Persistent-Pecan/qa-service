@@ -10,6 +10,7 @@ app.use(express.json());
 app.use(middleware.logger);
 
 // GET Routes
+app.get('/', (req, res) => { res.send(`Server running on port ${port}`); });
 app.get('/qa/questions', models.listQuestions);
 app.get('/qa/questions/:question_id/answers', models.listAnswers);
 
