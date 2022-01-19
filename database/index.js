@@ -1,8 +1,8 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'qa',
-  password: process.env.POSTGRES,
+  user: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PW,
   host: 'localhost',
   database: 'qa',
   max: 20,

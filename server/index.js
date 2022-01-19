@@ -1,7 +1,6 @@
 const express = require('express');
 const models = require('./models');
 const middleware = require('./middleware');
-require('newrelic');
 
 const app = express();
 const port = process.env.PORT || 3000;

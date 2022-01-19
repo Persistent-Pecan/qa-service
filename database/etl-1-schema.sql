@@ -19,8 +19,6 @@ CREATE TABLE questions (
  question_helpfulness INTEGER DEFAULT 0
 );
 
-
-
 -- ANSWERS
 CREATE TABLE answers (
  id BIGSERIAL,
