@@ -1,4 +1,4 @@
--- psql -d qa -f database/queries.sql
+-- psql -U sdc -d qa -f database/queries.sql
 
 -------------------------
 -- Function for random integer
