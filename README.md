@@ -6,6 +6,7 @@ This service replaces the existing API with a backend system that can support th
 - Node.js
 - Express / Postgres
 - Frisby / Jest
+- k6
 - New Relic
 
 ## Setup
