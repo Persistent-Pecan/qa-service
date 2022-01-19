@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon ./server/index.js"
+    "test": "jest",
+    "start": "nodemon -r newrelic ./server/index.js"
   },
   "repository": {
     "type": "git",
@@ -19,7 +19,11 @@
   },
   "homepage": "https://github.com/Persistent-Pecan/questions-answers#readme",
   "dependencies": {
+    "dotenv": "^14.2.0",
     "express": "^4.17.2",
+    "forever": "^4.0.2",
+    "newrelic": "^8.7.1",
+    "nodemon": "^2.0.15",
     "pg": "^8.7.1"
   },
   "devDependencies": {
@@ -28,6 +32,8 @@
     "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0"
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "frisby": "^2.1.3",
+    "jest": "^27.4.7"
   }
 }

@@ -1,4 +1,4 @@
-// k6 run tests/stress.js
+// k6 run server/stress-test.js
 
 import http from 'k6/http';
 import { check } from 'k6';
