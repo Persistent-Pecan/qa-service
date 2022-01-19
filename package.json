@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest",
     "start": "nodemon -r newrelic ./server/index.js",
-    "stress": "k6 run server/stress-test.js"
+    "stress": "k6 run server/stress-test.js",
+    "forever": "forever -r newrelic ./server/index.js"
   },
   "repository": {
     "type": "git",
