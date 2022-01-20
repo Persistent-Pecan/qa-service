@@ -10,7 +10,7 @@ export const options = {
 
 export default function () {
   const randProduct = Math.floor(Math.random() * 1000010);
-  const response = http.get(`http://localhost:3000/qa/questions?product_id=${randProduct}`);
+  const response = http.get(`http://3.91.47.14:3000/qa/questions?product_id=${randProduct}`);
   check(response, {
     'is status 200': (r) => r.status === 200,
     'transaction time < 25ms': (r) => r.timings.duration < 25,
