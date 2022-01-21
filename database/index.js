@@ -11,6 +11,11 @@ const pool = new Pool({
   connectionTimeoutMillis: 2000,
 });
 
+pool
+  .connect()
+  .then(() => console.log('connected'))
+  .catch((err) => console.error('connection error', err.stack));
+
 pool.on('error', (err, client) => {
   console.error('Unexpected error on idle client', err);
   process.exit(-1);
