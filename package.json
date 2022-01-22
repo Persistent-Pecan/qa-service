@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "start": "nodemon -r newrelic ./server/index.js",
+    "start": "nodemon ./server/index.js",
     "stress": "k6 run server/stress-test.js",
-    "forever": "forever start -r newrelic ./server/index.js"
+    "forever": "forever start ./server/index.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,6 @@
     "dotenv": "^14.2.0",
     "express": "^4.17.2",
     "forever": "^4.0.2",
-    "newrelic": "^8.7.1",
     "nodemon": "^2.0.15",
     "pg": "^8.7.1"
   },
