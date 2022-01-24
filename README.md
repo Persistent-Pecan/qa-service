@@ -1,6 +1,4 @@
 # Questions & Answers
-
-## About
 This service replaces the existing API with a backend system that can support the full data set for the project and can scale to meet the demands of production traffic.
 
 ## Setup
