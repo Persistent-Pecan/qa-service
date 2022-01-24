@@ -15,7 +15,7 @@ POST routes:
 - `/qa/questions` - Submit a new question for the `product_id` in the request body.
 - `/qa/questions/:question_id/answers` - Submit a new answer for the `question_id` in the request body.
 
-## Tech Stack
+## Dependencies
 
 - Node.js
 - Express
