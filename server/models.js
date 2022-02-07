@@ -104,7 +104,9 @@ module.exports = {
   },
 
   postQuestion: async (req, res) => {
-    const { product_id, body, name, email } = req.body;
+    const {
+      product_id, body, name, email,
+    } = req.body;
 
     const query = `
       INSERT INTO questions (product_id, question_body, question_date, asker_name, asker_email)
@@ -121,7 +123,9 @@ module.exports = {
   },
 
   postAnswer: async (req, res) => {
-    const { question_id, body, name, email, photos } = req.body;
+    const {
+      question_id, body, name, email, photos,
+    } = req.body;
 
     const queryInsertAnswer = `
       INSERT INTO answers (question_id, body, date, answerer_name, answerer_email)

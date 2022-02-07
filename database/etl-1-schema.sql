@@ -1,6 +1,4 @@
--- psql -d qa -f database/etl-1-schema.sql -a
-
--- CREATE DATABASE qa;
+CREATE DATABASE qa;
 \connect qa;
 
 -- QUESTIONS
