@@ -16,7 +16,7 @@ pool
   .then(() => console.log('connected'))
   .catch((err) => console.error('connection error', err.stack));
 
-pool.on('error', (err, client) => {
+pool.on('error', (err) => {
   console.error('Unexpected error on idle client', err);
   process.exit(-1);
 });

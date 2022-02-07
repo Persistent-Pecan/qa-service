@@ -1,5 +1,3 @@
--- psql -d qa -f database/etl-2-import-csv.sql -a
-
 \copy questions FROM './data/questions.csv' DELIMITER ',' csv header;
 -- 3,518,963 rows
 
