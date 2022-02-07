@@ -17,13 +17,12 @@ POST routes:
 
 ## Dependencies
 
-- Node.js
-- Express
-- Postgres
-- Frisby
-- Jest
-- k6
-- Loader.io
-- New Relic
-- Cloudwatch
-- Docker
+- [Node.js](https://nodejs.org/en) / [Express](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/) / [node-postgres](https://node-postgres.com/)
+- [Jest](https://jestjs.io/) / [Frisby](https://docs.frisbyjs.com/)
+- [k6](https://k6.io/stress-testing/) / [Loader.io](https://loader.io/)
+- [AWS EC2](https://aws.amazon.com/ec2/)
+- [NGINX](https://nginx.org/en/)
+- [Docker](https://www.docker.com/)
+- [New Relic](https://newrelic.com/)
+- [AWS Cloudwatch](https://aws.amazon.com/cloudwatch/)
